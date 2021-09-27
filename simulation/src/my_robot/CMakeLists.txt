@@ -153,7 +153,7 @@ add_executable(kinect_subscriber_node src/kinect_subscriber.cpp)
 add_executable(dataset_kinect_subscriber_node src/dataset_kinect_subscriber.cpp)
 add_executable(time_sync_subscriber_node src/time_sync_kinect_subsriber.cpp)
 add_executable(ground_truth_publisher_node src/ground_truth_publisher.cpp)
-add_executable(controller_commands_node src/controller_commands.cpp)
+#add_executable(controller_commands_node src/controller_commands.cpp)
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
 ## target back to the shorter version for ease of user use
@@ -167,7 +167,7 @@ add_dependencies(kinect_subscriber_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${ca
 add_dependencies(dataset_kinect_subscriber_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 add_dependencies(time_sync_subscriber_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 add_dependencies(ground_truth_publisher_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
-add_dependencies(controller_commands_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+#add_dependencies(controller_commands_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 ## Specify libraries to link a library or executable target against
 # target_link_libraries(${PROJECT_NAME}_node
@@ -177,7 +177,7 @@ target_link_libraries(kinect_subscriber_node   ${catkin_LIBRARIES} ${PCL_LIBRARI
 target_link_libraries(dataset_kinect_subscriber_node   ${catkin_LIBRARIES} ${PCL_LIBRARIES} )
 target_link_libraries(time_sync_subscriber_node   ${catkin_LIBRARIES} ${PCL_LIBRARIES} ${OpenCV_LIBRARIES})
 target_link_libraries(ground_truth_publisher_node   ${catkin_LIBRARIES} ${PCL_LIBRARIES} )
-target_link_libraries(controller_commands_node   ${catkin_LIBRARIES} ${PCL_LIBRARIES} )
+#target_link_libraries(controller_commands_node   ${catkin_LIBRARIES} ${PCL_LIBRARIES} )
 
 
 
