@@ -1,0 +1,3 @@
+votenetDetection[] detections
+sensor_msgs/PointCloud2 scene_pc
+sensor_msgs/Image depth_image
