@@ -28,5 +28,6 @@ If everything works fine then you should see robot model, point cloud and images
 ```
 
 ##Results:
+
 <img src="../images/simulation/robot-gazebo.jpg" width="300" height="300">
 <img src="../images/simulation/robot-rviz.png" width="300" height="300">
