@@ -8,7 +8,7 @@ from geometry_msgs.msg import Point, Pose, Quaternion
 from rviz_tools import RvizMarkers
 import sys
 # insert at 1, 0 is the script path (or '' in REPL)
-sys.path.insert(1, '/home/vcr/UBC/Research/votenet')
+#sys.path.insert(1, '/home/vcr/UBC/Research/votenet')
 from votenet_ros_version import run_votenet
 
 des_frame = "odom"                  # -- enable for simulation
