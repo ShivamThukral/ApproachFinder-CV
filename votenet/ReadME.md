@@ -1,11 +1,11 @@
 ## Votenet ROS integration
-Please follow the instructions given [here](https://github.com/facebookresearch/votenet) to install votenet relevant packages. 
+Please follow the instructions given [here](https://github.com/facebookresearch/votenet) to install relevant votenet packages. 
 
 Note: If you wish to use conda multiple environments and CUDA versions, then source them properly.
 
 We ship the code with a model trained on tables and toilets under *'ros_votenet/scripts/votenet_model'*. 
 
-Run the rosified Votenet for table and toilet detections by: 
+Run the rosified votenet for table and toilet detections by: 
 ```
 rosrun ros_votenet ros_votenet_detection.py 
 ```
