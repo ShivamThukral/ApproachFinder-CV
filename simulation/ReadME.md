@@ -27,7 +27,7 @@ If everything works fine then you should see robot model, point cloud and images
  roslaunch teleop_twist_joy teleop.launch
 ```
 
-##Results:
+## Results:
 
-<img src="../images/simulation/robot-gazebo.jpg" width="300" height="300">
-<img src="../images/simulation/robot-rviz.png" width="300" height="300">
+<img src="../images/simulation/robot-gazebo.jpg" width="500" height="500">
+<img src="../images/simulation/robot-rviz.png" width="500" height="500">
