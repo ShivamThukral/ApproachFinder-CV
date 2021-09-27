@@ -19,6 +19,6 @@ Subscribe to "/votenet/bboxRviz" topic in RVIZ for bounding box visualisations.
 
 ### Results:
 
-<img src="../images/votenet/votenet-table.png">
-<img src="../images/votenet/votenet-round-table.png">
-<img src="../images/votenet/votenet-conference-table.png" height="650" width="790">
+<img src="../images/votenet/votenet-table.png" height="330" width="400">
+<img src="../images/votenet/votenet-round-table.png" height="330" width="400">
+<img src="../images/votenet/votenet-conference-table.png" height="330" width="400">
