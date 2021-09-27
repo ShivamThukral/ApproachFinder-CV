@@ -1,0 +1,6 @@
+#gazebo_ros_control/pid_gains:
+#  left_front_wheel_joint: {p: 0.0, i: 0.0, d: 0.0}
+#  left_back_wheel_joint: {p: 0.0, i: 0.0, d: 0.0}
+#  right_front_wheel_joint: {p: 0.0, i: 0.0, d: 0.0}
+#  right_back_wheel_joint: {p: 0.0, i: 0.0, d: 0.0}
+  # More joints...

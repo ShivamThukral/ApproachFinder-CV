@@ -1,0 +1,10 @@
+<launch>
+    <param name="use_sim_time" value="true"/>
+    <node pkg="tf" type="static_transform_publisher" name="camera_center_baro" args="0.0 0.0 0.0 0 0 0 1 zed2_camera_center zed2_baro_link 100" />
+    <node pkg="tf" type="static_transform_publisher" name="base_camera_center" args="0.0 0.0 0.0 0 0 0 1 base_link zed2_camera_center 100" />
+    <node pkg="tf" type="static_transform_publisher" name="camera_center_left" args="0.0 0.06 0.0 0 0 0 1 zed2_camera_center zed2_left_camera_frame 100" />
+    <node pkg="tf" type="static_transform_publisher" name="left_left_optical" args="0.0 0.0 0.0 -0.5 0.5 -0.5 0.5 zed2_left_camera_frame zed2_left_camera_optical_frame 100" />
+    <node pkg="tf" type="static_transform_publisher" name="camera_center_right" args="0.0 -0.06 0.0 0 0 1 zed2_camera_center zed2_right_camera_frame 100" />
+    <node pkg="tf" type="static_transform_publisher" name="right_right_optical" args="0.0 0.0 0.0 -0.5 0.5 -0.5 0.5 zed2_right_camera_frame zed2_right_camera_optical_frame 100" />
+    <node pkg="tf" type="static_transform_publisher" name="left_imu" args="-0.00200000009499 -0.02300000377 -0.00200000009499 0.0 0.00038602022687 -0.00317147979513 0.999994874001 zed2_left_camera_frame zed2_imu_link 100" />
+</launch>

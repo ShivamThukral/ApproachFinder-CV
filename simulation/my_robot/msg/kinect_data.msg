@@ -1,0 +1,2 @@
+sensor_msgs/PointCloud2 scene
+sensor_msgs/Image depth_image

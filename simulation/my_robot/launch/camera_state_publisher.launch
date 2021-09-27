@@ -1,0 +1,7 @@
+<launch>
+<param name="use_sim_time" value="true"/>
+<node pkg="tf" type="static_transform_publisher" name="camera_depth" args="0.0 -0.02 0.0 0 0 0 1 camera_link camera_depth_frame 100" />
+<node pkg="tf" type="static_transform_publisher" name="camera_rgb_optical" args="0.0 0.0 0.0 -0.5 0.5 -0.5 0.5 camera_rgb_frame camera_rgb_optical_frame 100" />
+<node pkg="tf" type="static_transform_publisher" name="camera_depth_optical" args="0.0 0.0 0.0 -0.5 0.5 -0.5 0.5 camera_depth_frame camera_depth_optical_frame 100" />
+<node pkg="tf" type="static_transform_publisher" name="camera_rgb" args="0.0 -0.045 0.0 0 0 0 1 camera_link camera_rgb_frame 100" />
+</launch>

@@ -1,0 +1,13 @@
+<launch>
+
+    <node pkg="my_robot" name="ground_truth_mppi" type="ground_truth_publisher_node" output="screen">
+    </node>
+
+    <node pkg="my_robot" name="controller_commands_mppi" type="controller_commands_node" output="screen">
+    </node>
+
+    <node pkg="my_robot" name="joystick_mppi" type="joystick_talker.py" output="screen">
+        <remap from="cmd_vel_mppi" to="cmd_vel"/>
+    </node>
+
+</launch>
