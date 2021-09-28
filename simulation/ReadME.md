@@ -22,11 +22,11 @@ roslaunch my_worlds <file_name>.launch
 eg. roslaunch my_worlds  office_env_large.launch
 ```
 **Spawn the robot in the gazebo environment by supplying XY locations:**
-```bash 
+```asm 
 roslaunch my_robot spawn.launch x:=5 y:=5
 ```
 **Launch the robot model in RVIZ with specified RVIZ configuration file:**
-```bash
+```asm
 roslaunch my_robot rviz.launch rvizconfig:=simple_viz.rviz
 ```
 
@@ -34,7 +34,7 @@ If everything works fine then you should see robot model, point cloud and images
 
 **Robot Control: keyboard or joystick**
 
-```bash
+```asm
  rosrun my_robot teleop_twist_keyboard.py
  OR
  roslaunch teleop_twist_joy teleop.launch
@@ -42,5 +42,5 @@ If everything works fine then you should see robot model, point cloud and images
 
 ## Results:
 
-<img src="../images/simulation/robot-gazebo.jpg" width="500" height="500">
-<img src="../images/simulation/robot-rviz.png" width="500" height="500">
+<img src="../images/simulation/robot-gazebo.jpg" width="450" height="450">
+<img src="../images/simulation/robot-rviz.png" width="450" height="450">
