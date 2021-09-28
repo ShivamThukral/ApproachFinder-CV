@@ -1,10 +1,23 @@
 ## Simulation Environment in Gazebo
-Please download the gazebo models from [here](https://data.nvision2.eecs.yorku.ca/3DGEMS/) and save it under *my_worlds/models* directory.
-Compile the code using catkin_make command and source the files.
+### Installation Instructions:
+
+- Download gazebo models from [here](https://data.nvision2.eecs.yorku.ca/3DGEMS/) and save it under *my_worlds/models* directory.
+- Install [Gazebo9.x](http://gazebosim.org/tutorials?cat=install&tut=install_ubuntu&ver=9.0)
+- Install [PCL 1.8](https://pointclouds.org/downloads/)
+
+Compile the code by running catkin_make from *'simulation'* folder and source the files.
+```asm
+cd ../simulation
+catkin_make  
+source devel/setup.bash
+```
+
+
+
 ### Steps to launch the simluation environment:
 
 **Launch any world environment from 'my_worlds/launch' folder by:**
-```bash 
+```
 roslaunch my_worlds <file_name>.launch
 eg. roslaunch my_worlds  office_env_large.launch
 ```
