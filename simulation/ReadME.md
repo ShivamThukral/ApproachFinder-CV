@@ -42,4 +42,4 @@ If everything works fine then you should see robot model, point cloud and images
 
 ## Results:
 
-<img src="../images/simulation/robot-gazebo.jpg" width="400" height="400"> <img src="../images/simulation/robot-rviz.png" width="400" height="400">
+<img src="../images/simulation/robot-gazebo.jpg" width="420" height="420"> <img src="../images/simulation/robot-rviz.png" width="420" height="420">
