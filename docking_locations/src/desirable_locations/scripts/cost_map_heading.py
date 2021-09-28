@@ -29,24 +29,24 @@ frame = 'odom'
 #RVIZ PARAMS
 RVIZ_DURATION = 4
 PI = 3.14159
-scale = Vector3(0.5, 0.05, 0.05) # x=length, y=height, z=height # single value for length (height is relative)
+scale = Vector3(0.3, 0.05, 0.05) # x=length, y=height, z=height # single value for length (height is relative)
 z_pi = R.from_euler('z', 180, degrees=True) # to visualise properly
 
 #MAP DIMENSIONS
-# map_bounds_x = np.array([-8.0,8.0],dtype = 'float')             # [x_min, x_max]
-# map_bounds_y = np.array([-8.0,8.0],dtype = 'float')             # [x_min, x_max]
-# map_bounds_theta = np.array([-3.14,3.14],dtype = 'float')       # [theta_min, theta_max]
-# resolution = 0.025                                              # sampling in XY-plane
+map_bounds_x = np.array([-5.5,5.5],dtype = 'float')             # [x_min, x_max]
+map_bounds_y = np.array([-5.5,5.5],dtype = 'float')             # [x_min, x_max]
+map_bounds_theta = np.array([-3.14,3.14],dtype = 'float')       # [theta_min, theta_max]
+resolution = 0.025                                              # sampling in XY-plane
 
 
 # map_bounds_x = np.array([-15.8,13.0],dtype = 'float') # [x_min,x_max]
 # map_bounds_y = np.array([-15.8,13.0],dtype = 'float') # [x_min,x_max]
 # resolution = 0.1
 
-map_bounds_x = np.array([-10.0,9.2],dtype = 'float') # [x_min,x_max]
-map_bounds_y = np.array([-10.0,9.2],dtype = 'float') # [x_min,x_max]
-map_bounds_theta = np.array([0,2.0*PI],dtype = 'float')       # [theta_min, theta_max]
-resolution = 0.1
+# map_bounds_x = np.array([-10.0,9.2],dtype = 'float') # [x_min,x_max]
+# map_bounds_y = np.array([-10.0,9.2],dtype = 'float') # [x_min,x_max]
+# map_bounds_theta = np.array([0,2.0*PI],dtype = 'float')       # [theta_min, theta_max]
+# resolution = 0.1
 HEADING_BINS = 4.0
 theta_resolution = round(2.0*math.pi/HEADING_BINS,5)                         # sampling in radians
 
@@ -119,11 +119,12 @@ class costMap:
             #theta[i] = qr.as_euler('zyx',degrees=False)[0]                             #only consider rotation about z-axis
             quat = Quaternion(qr.as_quat()[0],qr.as_quat()[1],qr.as_quat()[2],qr.as_quat()[3])
             P = Pose(points[i],quat)
-            self.markers.publishArrow(P, 'yellow', scale, RVIZ_DURATION)                # pose, color, arrow_length, lifetime
+            if i % 2 == 0:
+                self.markers.publishArrow(P, 'yellow', scale, RVIZ_DURATION)                # pose, color, arrow_length, lifetime
             theta[i] = z_rot                                                           #only consider rotation about z-axis
             weights[i] = all_locations.desired_locations[i].location_weight
-
-        self.markers.publishSpheres(points, 'green', 0.09, RVIZ_DURATION) # path, color, diameter, lifetime
+        published_points = points[::2]
+        self.markers.publishSpheres(published_points, 'green', 0.12, RVIZ_DURATION) # path, color, diameter, lifetime
         locations = np.array([[p.x,p.y,p.z] for p in points]) #unpack the point
         # assertion: each point should have one corresponding weight
         assert(locations.shape[0] == weights.shape[0])
@@ -248,7 +249,7 @@ class costMap:
         points, weights, headings = self.publishLocations(all_locations)
         tic = time.perf_counter()
         instant_desirable = self.createGaussianFunctions(points, weights, headings)
-        # pass these values for temporal desirability
+        #pass these values for temporal desirability
         self.computeTemporalDesirability(instant_desirable)
         self.publishDesirableLocationsCostmap()
         toc = time.perf_counter()
