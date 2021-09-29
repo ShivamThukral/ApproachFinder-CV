@@ -59,5 +59,5 @@ For further details please refer each sub-directory.
 
 ## Results
 
-<img src="images/results/table1_gt.png" height="108.4" width="123.2">
+<img src="images/results/table1_gt.png" height="216" width="246"><img src="images/results/table2_gt.png" height="216" width="246"><img src="images/results/toilet1_gt.png" height="216" width="246"><img src="images/results/table3_gt.png" height="216" width="246">
 
