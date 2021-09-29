@@ -20,9 +20,44 @@ Each of the above-mentioned folders contains a README which summarises exact ste
 
 ## Demo in Simulation
 1. Launch Simulation Environment
+   1. Launch the simulation environment:
+      ```asm
+       roslaunch my_worlds my_office_env.launch
+      ```
+   2. Spawn the robot:
+      ```asm
+        roslaunch my_robot spawn.launch x:=4 y:=4
+      ```
+   3. Publish pointcloud to votenet:
+      ```asm
+        rosrun my_robot time_sync_subscriber_node
+      ```
+   4. Launch RVIZ to visualise th results
+      ```asm
+        roslaunch my_robot rviz.launch 
+      ```
+   5. Launch the joystick controller
+      ```asm
+        roslaunch teleop_twist_joy teleop.launch
+      ```
 2. Launch Votenet
+   1. Launch votenet:
+      ```asm
+        rosrun ros_votenet ros_votenet_detection.py 
+      ```
 3. Launch CV pipeline
+   1. Launch docking locations node:
+      ```asm
+        rosrun desirable_locations find_locations_approx_node 
+      ```
+   2. Launch costmap node:
+      ```asm
+        rosrun desirable_locations cost_map_heading.py
+      ```
 
+For further details please refer each sub-directory.
 
 ## Results
+
+<img src="../images/results/table1_gt.png" height="300" width="360">
 
