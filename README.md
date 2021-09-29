@@ -59,5 +59,5 @@ For further details please refer each sub-directory.
 
 ## Results
 
-<img src="images/results/table1_gt.png">
+<img src="images/results/table1_gt.png" height="108.4" width="123.2">
 
