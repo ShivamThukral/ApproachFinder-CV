@@ -20,15 +20,10 @@ from joblib import Parallel, delayed
 #
 #
 #----------------------------------------------
-
 frame = 'odom'
-#frame = 'map'
-#frame = 'world'
-#frame = "camera_link"  #sjc dataset
 
 #RVIZ PARAMS
 RVIZ_DURATION = 4
-PI = 3.14159
 scale = Vector3(0.3, 0.05, 0.05) # x=length, y=height, z=height # single value for length (height is relative)
 z_pi = R.from_euler('z', 180, degrees=True) # to visualise properly
 
@@ -36,32 +31,30 @@ z_pi = R.from_euler('z', 180, degrees=True) # to visualise properly
 map_bounds_x = np.array([-5.5,5.5],dtype = 'float')             # [x_min, x_max]
 map_bounds_y = np.array([-5.5,5.5],dtype = 'float')             # [x_min, x_max]
 map_bounds_theta = np.array([-3.14,3.14],dtype = 'float')       # [theta_min, theta_max]
-resolution = 0.025                                              # sampling in XY-plane
+resolution = 0.05
+#resolution = 0.025
 
-
+# sampling in XY-plane
+# uncomment this for small large env
 # map_bounds_x = np.array([-15.8,13.0],dtype = 'float') # [x_min,x_max]
 # map_bounds_y = np.array([-15.8,13.0],dtype = 'float') # [x_min,x_max]
 # resolution = 0.1
-
+# uncomment this for small office env
 # map_bounds_x = np.array([-10.0,9.2],dtype = 'float') # [x_min,x_max]
 # map_bounds_y = np.array([-10.0,9.2],dtype = 'float') # [x_min,x_max]
 # map_bounds_theta = np.array([0,2.0*PI],dtype = 'float')       # [theta_min, theta_max]
 # resolution = 0.1
-HEADING_BINS = 4.0
-theta_resolution = round(2.0*math.pi/HEADING_BINS,5)                         # sampling in radians
 
+HEADING_BINS = 8.0
+theta_resolution = round(2.0*math.pi/HEADING_BINS,5)                         # sampling in radians
 
 #grid initialisations with theta
 grid_x, grid_y, grid_theta = np.mgrid[map_bounds_x[0]:map_bounds_x[1]:resolution, map_bounds_y[0]:map_bounds_y[1]:resolution, map_bounds_theta[0]:map_bounds_theta[1]:theta_resolution]
 r,c,t = grid_x.shape
 
 # this pcd is used for temporal desirability
-temporal_desirability_xytheta = []      # used to store log-odds sum
-grid_xytheta = []                       # used to calculate pdf values
-
-temporal_desirability_xytheta = np.zeros((r,c,t),dtype='float')
-
-grid_xytheta = np.empty(grid_x.shape + (3,))
+temporal_desirability_xytheta = np.zeros((r,c,t),dtype='float')     # used to store log-odds sum
+grid_xytheta = np.empty(grid_x.shape + (3,))                       # used to calculate pdf values
 grid_xytheta[:, :, :,0] = grid_x
 grid_xytheta[:, :, :,1] = grid_y
 grid_xytheta[:, :, :,2] = grid_theta
@@ -71,25 +64,10 @@ xyz = np.zeros((r*c, 3),dtype='float')
 xyz[:, 0] = np.reshape(x_grid, -1)
 xyz[:, 1] = np.reshape(y_grid, -1)
 
-scalar = 0.9 # How much gaussian spread we want 0.1 m or 10 cm
+scalar = 1.5 # How much gaussian spread we want 1.5m
 cov_mat = scalar * np.identity(3, dtype = 'float')
-cov_mat[2][2] = PI/18.0   # 45-degrees only
+cov_mat[2][2] = np.pi/18.0   # 45-degrees only
 #cov_mat[2][2] = 0.174533    # 10-degree
-
-def triVariatePDF(mu):
-    """Return the multivariate Gaussian distribution on array pos.
-    pos is an array constructed by packing the meshed arrays of variables
-    x_1, x_2, x_3, ..., x_k into its _last_ dimension.
-    """
-    Sigma = cov_mat
-    n = mu.shape[0]
-    Sigma_det = np.linalg.det(Sigma)
-    Sigma_inv = np.linalg.inv(Sigma)
-    N = np.sqrt((2*np.pi)**n * Sigma_det)
-    # This einsum call calculates (x-mu)T.Sigma-1.(x-mu) in a vectorized
-    # way across all the input variables.
-    fac = np.einsum('...k,kl,...l->...', grid_xytheta-mu, Sigma_inv, grid_xytheta-mu)
-    return np.exp(-fac / 2) / N
 
 class costMap:
     def __init__(self):
@@ -112,16 +90,17 @@ class costMap:
             points.append(all_locations.desired_locations[i].location)
             heading = all_locations.desired_locations[i].heading
             qr = R.from_quat([heading.x, heading.y, heading.z, heading.w])
+            theta[i] = qr.as_euler('zyx',degrees=False)[0]                             #only consider rotation about z-axis
             qr = qr * z_pi
             z_rot = qr.as_euler('zyx',degrees=False)[0]
             if z_rot < 0:
                 z_rot += 2*math.pi;
-            #theta[i] = qr.as_euler('zyx',degrees=False)[0]                             #only consider rotation about z-axis
+
             quat = Quaternion(qr.as_quat()[0],qr.as_quat()[1],qr.as_quat()[2],qr.as_quat()[3])
             P = Pose(points[i],quat)
             if i % 2 == 0:
                 self.markers.publishArrow(P, 'yellow', scale, RVIZ_DURATION)                # pose, color, arrow_length, lifetime
-            theta[i] = z_rot                                                           #only consider rotation about z-axis
+            #theta[i] = z_rot                                                           #only consider rotation about z-axis
             weights[i] = all_locations.desired_locations[i].location_weight
         published_points = points[::2]
         self.markers.publishSpheres(published_points, 'green', 0.12, RVIZ_DURATION) # path, color, diameter, lifetime
@@ -134,7 +113,6 @@ class costMap:
     def createGaussianFunctions(self, points, weights, theta):
         N = len(weights)
         points[:,2] = theta[:,0] #replace the last col (height) with desired heading.
-        #tic = time.perf_counter()
         pdf_sum = np.zeros(shape=(r, c, t),dtype='float')
         F = [multivariate_normal(points[i], cov_mat) for i in range(N)]
         results = Parallel(n_jobs=4)(delayed(F[i].pdf)(grid_xytheta) for i in range(N))
@@ -145,11 +123,10 @@ class costMap:
             pdf_sum = np.add(pdf_sum, pdf)
 
         # normalise the wholw map for 0-1 probability
-        normalise = np.amax(pdf_sum[:,:,:])
+
         for i in range(t):
+            normalise = np.amax(pdf_sum[:,:,i])
             pdf_sum[:,:,i] = pdf_sum[:,:,i] if normalise == 0 else np.divide(pdf_sum[:,:,i], normalise)
-        #toc = time.perf_counter()
-        #print(f" Function+++++++++++++++++++++++ time {toc - tic:0.4f} seconds")
 
         # Visualise this grid to check if everything is fine
         for i in range(t):
@@ -158,47 +135,22 @@ class costMap:
             open3d_pcd.points = o3d.utility.Vector3dVector(xyz)
             ros_cloud = convertCloudFromOpen3dToRos(open3d_pcd,frame)
             self.instantaneous_publisher[i].publish(ros_cloud)
-        # results = Parallel(n_jobs=4)(delayed(triVariatePDF)(points[i]) for i in range(N))
-        # for i in range(N):
-        #     pdf = np.multiply(results[i],weights[i])
-        #     pdf_sum = np.add(pdf_sum, pdf)          # this is element-wise so it works
-        # #toc = time.perf_counter()
-        # #noramlise along each heading separately
-        # for i in range(angles):
-        #     normalise = np.amax(pdf_sum[:,:,i])
-        #     pdf_sum[:,:,i] = pdf_sum[:,:,i] if normalise == 0 else np.divide(pdf_sum[:,:,i], normalise)
-        # #normalise = np.amax(pdf_sum)
-        #pdf_sum = pdf_sum if normalise == 0 else np.divide(pdf_sum, normalise)
-        #print(f" Function+++++++++++++++++++++++ time {toc - tic:0.4f} seconds")
-        #Visualise this grid to check if everything is fine
-        # xyz[:, 2] = np.reshape(pdf_sum[:,:,1],-1)
-        # #Pass xyz to Open3D.o3d.geometry.PointCloud and visualize
-        # pcd_plane = o3d.geometry.PointCloud()
-        # pcd_plane.points = o3d.utility.Vector3dVector(xyz)
-        # #o3d.visualization.draw_geometries([pcd_plane])
-        # ros_cloud = convertCloudFromOpen3dToRos(pcd_plane,frame)
-        # self.pub_.publish(ros_cloud)
         print("Instantaneous done!")
         return  pdf_sum
 
     def computeTemporalDesirability(self, instant_desirable):
         global temporal_desirability_xytheta
         # calculations for current sensor measurement
-
         inverse_sensor_measurement = logit(instant_desirable)
-        #inverse_sensor_measurement[inverse_sensor_measurement > 5.0] = 5.0
-        #inverse_sensor_measurement[inverse_sensor_measurement < -5.0] = -5.0
-        # temporal_desirability_xytheta = inverse_sensor_measurement
         temporal_desirability_xytheta = np.add(temporal_desirability_xytheta,inverse_sensor_measurement)
         temporal_desirability_xytheta[temporal_desirability_xytheta > 5.0] = 5.0
         temporal_desirability_xytheta[temporal_desirability_xytheta < -5.0] = -5.0
-        # temporal_desirability_xytheta = inverse_sensor_measurement
 
 
         # for plotting the pcd convert it back
         for i in range(t):
             xyz[:,2] = expit(temporal_desirability_xytheta[:,:,i]).flatten()   # do element wise expit to get back the belief
-            print(" {} = {} = {} ".format(i,int(i*theta_resolution * 180/math.pi),np.amax(xyz[:,2])))
+            print(" {} degrees = {} ".format(int(i*theta_resolution * 180/math.pi),np.amax(xyz[:,2])))
             #uncomment to publish desirable temporal map
             desirable_pcd =  o3d.geometry.PointCloud()
             desirable_pcd.points = o3d.utility.Vector3dVector(xyz)
@@ -242,7 +194,6 @@ class costMap:
             desirability_maps.desirability_maps.append(costmap)
             self.occupany_costmap_pub[i].publish(costmap)
         self.pub_costmap.publish(desirability_maps)
-
 
     def callback(self, all_locations):
         # publishes the parking spots

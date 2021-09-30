@@ -6,10 +6,25 @@
 - Install [OpenCV](https://docs.opencv.org/3.4.15/d7/d9f/tutorial_linux_install.html)
 - Install [Open3D](http://www.open3d.org/docs/release/getting_started.html)
 
+You might need some additional ROS packages:
+```asm
+sudo apt-get install ros-melodic-rviz-visual-tools 
+```
 ### Steps to find docking locations in simulation:
-
+**Run the simulation setup:**
+```asm
+cd simulation
+roslaunch my_worlds my_office_env.launch
+roslaunch my_robot spawn.launch x:=4 y:=4
+roslaunch my_robot rviz.launch rvizconfig:=demo.rviz
+roslaunch teleop_twist_joy teleop.launch
+rosrun my_robot time_sync_subscriber_node
+cd ../votenet
+rosrun ros_votenet ros_votenet_detection.py
+```
 **Run the ros-node to find docking locations aound indoor objects in a scene:**
 ```asm
+cd ../docking_locations
 rosrun desirable_locations find_locations_approx_node 
 ```
 
@@ -22,10 +37,6 @@ For this, first launch the cost_map node and then configure the RVIZ configurati
 rosrun desirable_locations cost_map_heading.py
 ```
 
-**Finally, open the configuration file under *'simulation/src/my_robot/config'* with rviz through GUI or by running this command:**
-```asm
-roslaunch my_robot rviz.launch rvizconfig:=my_robot_new.rviz
-```
 
 ## Results:
 
