@@ -20,7 +20,7 @@ find_package(catkin REQUIRED COMPONENTS
   message_generation
   cv_bridge
   nav_msgs
-        dynamic_reconfigure
+   dynamic_reconfigure
 )
 
 find_package(PCL 1.8 REQUIRED)
