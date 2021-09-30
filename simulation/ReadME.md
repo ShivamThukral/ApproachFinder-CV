@@ -52,4 +52,4 @@ If everything works fine then you should see robot model, point cloud and images
 Please change the joystick enable button according to your joystick in *'simulation/src/teleop_twist_joy/config/logitech.config.yaml'*.
 ## Results:
 
-<img src="../images/simulation/gazebo.p" width="555" height="425"> <img src="../images/simulation/rviz.jpg" width="555" height="425">
+<img src="../images/simulation/gazebo.jpg" width="555" height="425"> <img src="../images/simulation/rviz.jpg" width="555" height="425">
