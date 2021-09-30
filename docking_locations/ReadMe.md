@@ -40,5 +40,5 @@ rosrun desirable_locations cost_map_heading.py
 
 ## Results:
 
-<img src="../images/docking_locations/docking_locations_conference.png" height="330" width="400"> <img src="../images/docking_locations/docking_locations_round.png" height="330" width="400">
-<img src="../images/docking_locations/desirability_table.png" height="330" width="400"> <img src="../images/docking_locations/desirability_circular.png" height="330" width="400">
+<img src="../images/docking_locations/conference_docking.png" height="330" width="400"> <img src="../images/docking_locations/conference_costmap.png" height="330" width="400">
+<img src="../images/docking_locations/round_docking.png" height="330" width="400"> <img src="../images/docking_locations/round_costmap.png" height="330" width="400">
