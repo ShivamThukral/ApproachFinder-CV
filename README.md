@@ -65,6 +65,7 @@ For further details please refer each sub-directory.
 1. Publish the point cloud on topic *"/camera/depth/points"*. This should be in up-right position (z-axis up).
 2. Publish depth image on topic *"/camera/depth/image_raw"*. This channel expects the depth values in meters.
 3. Publish the camera information on topic *"/camera/depth/camera_info"*. Please refer here to know more about [CameraInfo](https://docs.ros.org/en/melodic/api/sensor_msgs/html/msg/CameraInfo.html) message.
+4. Follow steps 2 and 3 from "Demo in Simulation".
 
 ### Results on [SUN RGB-D](https://rgbd.cs.princeton.edu/) dataset:
 
